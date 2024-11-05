@@ -1,0 +1,9 @@
+{
+	"name": "Firefox-Variant-Installer",
+	"id": "firefox-set",
+	"version": "0.1.0",
+	"description": "Installs multiple variants of Firefox configured for theme development",
+	"installsAfter": [
+		"ghcr.io/devcontainers/features/desktop-lite"
+	]
+}
