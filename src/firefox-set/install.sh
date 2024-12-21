@@ -38,15 +38,15 @@ for version in "${!firefox_versions[@]}"; do
 		sudo rm -r "/opt/${version}"
 	fi
 
-	if [ ! -f "/opt/${version}.tar.bz2" ]; then
-		echo "> wget -q -O \"/opt/${version}.tar.bz2\" \"https://download.mozilla.org/?product=${product}&os=linux64&lang=en-US\""
-		sudo wget -q -O "/opt/${version}.tar.bz2" "https://download.mozilla.org/?product=${product}&os=linux64&lang=en-US"
+	if [ ! -f "/opt/${version}.download" ]; then
+		echo "> wget -q -O \"/opt/${version}.download\" \"https://download.mozilla.org/?product=${product}&os=linux64&lang=en-US\""
+		sudo wget -q -O "/opt/${version}.download" "https://download.mozilla.org/?product=${product}&os=linux64&lang=en-US"
 	else
 		echo "ℹ️  ${version} has already been downloaded. Skipping..."
 	fi
 
-	echo "> sudo tar -xjf \"/opt/${version}.tar.bz2\" -C /opt"
-	sudo tar -xjf "/opt/${version}.tar.bz2" -C /opt
+	echo "> sudo tar -xf \"/opt/${version}.download\" -C /opt"
+	sudo tar -xf "/opt/${version}.download" -C /opt
 
 	echo "> sudo mv /opt/firefox \"/opt/${version}\""
 	sudo mv /opt/firefox "/opt/${version}"
@@ -92,9 +92,9 @@ cat << 'EOF' > "/usr/local/bin/ff-installer-link"
 #!/usr/bin/env bash
 
 create_user_settings() {
-    local path="$1"
+	local path="$1"
 
-    cat << EOM > "${path}/user.js"
+	cat << EOM > "${path}/user.js"
 user_pref("toolkit.legacyUserProfileCustomizations.stylesheets", true);
 user_pref("browser.compactmode.show", true);
 user_pref("browser.toolbars.bookmarks.visibility", "always");
@@ -109,18 +109,18 @@ FILE="/opt/ff-dirs"
 SOURCE_DIR="${1:-$(pwd)}"
 
 if [ ! -f "$FILE" ]; then
-    echo "Error: File '$FILE' not found."
-    exit 1
+	echo "Error: File '$FILE' not found."
+	exit 1
 fi
 
 while IFS= read -r line; do
-    if [ -d "$line" ]; then
-        ln -sf "$SOURCE_DIR" "$line/chrome"
-        echo "Symlink created for $line/chrome"
-        create_user_settings "$line"
-    else
-        echo "Directory $line does not exist. Skipping..."
-    fi
+	if [ -d "$line" ]; then
+		ln -sf "$SOURCE_DIR" "$line/chrome"
+		echo "Symlink created for $line/chrome"
+		create_user_settings "$line"
+	else
+		echo "Directory $line does not exist. Skipping..."
+	fi
 done < "$FILE"
 EOF
 
