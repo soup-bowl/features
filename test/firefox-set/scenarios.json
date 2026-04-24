@@ -1,0 +1,12 @@
+{
+    "firefox_with_desktop_lite": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "ghcr.io/devcontainers/features/desktop-lite:1": {
+                "password": "noPassword"
+            },
+            "firefox-set": {}
+        },
+        "remoteUser": "root"
+    }
+}
